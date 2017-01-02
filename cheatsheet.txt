@@ -1,0 +1,7 @@
+ionic serve -w chrome --lab
+
+ionic run android --prod
+
+ionic g page pageName
+
+ionic g provider providerName
