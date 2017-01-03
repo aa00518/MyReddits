@@ -6,7 +6,7 @@
 
 <ion-content padding>
   <ion-card>
-    <img src="{{item.preview.images[0].source.url}}"/>
+    <img *ngIf="item.preview" src="{{item.preview.images[0].source.url}}"/>
     <ion-card-content>
       <ion-card-title>
         {{item.title}}
