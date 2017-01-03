@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { Redditsprovider } from '../../providers/redditsprovider';
 import { DetailsPage } from '../details/details'
+import { LoadingController } from 'ionic-angular';
 
 @Component({
   selector: 'page-reddits',
@@ -13,7 +14,7 @@ export class RedditsPage {
   category: any;
   limit: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private redditsprovider: Redditsprovider) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private redditsprovider: Redditsprovider, public loadingCtrl: LoadingController) {
     this.getDefaults();
   }
 
@@ -39,10 +40,18 @@ export class RedditsPage {
     this.getPosts(this.category, this.limit);
   }
 
-  getPosts(category, limit) {
+  public getPosts(category, limit) {
+
+    let loader = this.loadingCtrl.create({
+      content: "Please wait..."
+    });
+    loader.present();
+
     this.redditsprovider.getPosts(category, limit).subscribe(response => {
       this.items = response.data.children;
     });
+
+    loader.dismiss();
   }
 
   viewItem(item) {

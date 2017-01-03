@@ -1,7 +1,5 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
-import { Redditsprovider } from '../../providers/redditsprovider';
-import { RedditsPage } from '../reddits/reddits';
 
 @Component({
   selector: 'page-settings',
@@ -12,7 +10,7 @@ export class SettingsPage {
   category: any;
   limit: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private redditsprovider: Redditsprovider) {
+  constructor(public navCtrl: NavController, public navParams: NavParams) {
     this.getDefaults();
   }
 
@@ -37,8 +35,7 @@ export class SettingsPage {
     localStorage.setItem('category', this.category);
     localStorage.setItem('limit', this.limit);
     
-    //this.navCtrl.push(RedditsPage);
-    this.navCtrl.parent.select(0).fireWillEnter();
+    this.navCtrl.parent.select(0).getPosts(this.category, this.limit);
   }
 
   // ionViewDidLoad() {
