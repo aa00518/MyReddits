@@ -43,7 +43,7 @@ export class RedditsPage {
   public getPosts(category, limit) {
 
     let loader = this.loadingCtrl.create({
-      content: "Please wait..."
+      content: "Loading..."
     });
     loader.present();
 
