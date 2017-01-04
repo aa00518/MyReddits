@@ -5,7 +5,6 @@
 </ion-header>
 
 <ion-content padding class="tabSwitch">
-  <form (submit)="setDefaults()">
     <ion-list>
       <ion-item>
         <ion-label fixed>Category</ion-label>
@@ -21,15 +20,14 @@
       </ion-item>
       <ion-item>
         <ion-label fixed>Limit</ion-label>
-          <ion-select [(ngModel)]="limit" name="limit">
-            <ion-option value="5">5</ion-option>
-            <ion-option value="10">10</ion-option>
-            <ion-option value="15">15</ion-option>
-            <ion-option value="20">20</ion-option>
-            <ion-option value="25">25</ion-option>
-          </ion-select>
+        <ion-select [(ngModel)]="limit" name="limit">
+          <ion-option value="5">5</ion-option>
+          <ion-option value="10">10</ion-option>
+          <ion-option value="15">15</ion-option>
+          <ion-option value="20">20</ion-option>
+          <ion-option value="25">25</ion-option>
+        </ion-select>
       </ion-item>
-      <button ion-button type="submit" block>Save Changes</button>
     </ion-list>
-  </form>
+    <button ion-button block (click)="saveSettings()">Save Settings</button>
 </ion-content>

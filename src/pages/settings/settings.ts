@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
+import { Usersettings } from '../../providers/usersettings';
 
 @Component({
   selector: 'page-settings',
@@ -10,35 +11,17 @@ export class SettingsPage {
   category: any;
   limit: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
-    this.getDefaults();
+  constructor(public navCtrl: NavController, public navParams: NavParams, private usersettings: Usersettings) {
   }
 
-  // ngOnInit() {
-  // }
-
-  getDefaults() {
-    if (localStorage.getItem('category') != null) {
-      this.category = localStorage.getItem('category');
-    } else {
-      this.category = 'sports';
-    }
-
-    if (localStorage.getItem('limit') != null) {
-      this.limit = localStorage.getItem('limit');
-    } else {
-      this.limit = 10;
-    }
+  ngOnInit() {
+    this.category = this.usersettings.getCategory();
+    this.limit = this.usersettings.getLimit();
   }
 
-  setDefaults() {
-    localStorage.setItem('category', this.category);
-    localStorage.setItem('limit', this.limit);
-    
-    this.navCtrl.parent.select(0).getPosts(this.category, this.limit);
+  saveSettings() {
+    this.usersettings.setUserSettings(this.category, this.limit);
+    this.usersettings.setHasChanged();
+    this.navCtrl.parent.select(0);
   }
-
-  // ionViewDidLoad() {
-  //   console.log('ionViewDidLoad SettingsPage');
-  // }
 }

@@ -1,12 +1,13 @@
 import { Component } from '@angular/core';
 import { Platform } from 'ionic-angular';
 import { StatusBar, Splashscreen } from 'ionic-native';
-import { Redditsprovider } from '../providers/redditsprovider'
+import { Redditsprovider } from '../providers/redditsprovider';
+import { Usersettings } from '../providers/usersettings';
 import { TabsPage } from '../pages/tabs/tabs';
 
 @Component({
   templateUrl: 'app.html',
-  providers: [Redditsprovider]
+  providers: [Redditsprovider, Usersettings]
 })
 export class MyApp {
   rootPage = TabsPage;

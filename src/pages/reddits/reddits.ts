@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { Redditsprovider } from '../../providers/redditsprovider';
+import { Usersettings } from '../../providers/usersettings';
 import { DetailsPage } from '../details/details'
 import { LoadingController } from 'ionic-angular';
 
@@ -14,34 +15,20 @@ export class RedditsPage {
   category: any;
   limit: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private redditsprovider: Redditsprovider, public loadingCtrl: LoadingController) {
-    this.getDefaults();
+  constructor(public navCtrl: NavController, public navParams: NavParams, private redditsprovider: Redditsprovider, private loadingCtrl: LoadingController, private usersettings: Usersettings) {
   }
 
-  getDefaults() {
-    if (localStorage.getItem('category') != null) {
-      this.category = localStorage.getItem('category');
-    } else {
-      this.category = 'sports';
-    }
-
-    if (localStorage.getItem('limit') != null) {
-      this.limit = localStorage.getItem('limit');
-    } else {
-      this.limit = 10;
+  ionViewWillEnter() {
+    if (this.category == null || this.usersettings.getHasChanged())
+    {
+      this.category = this.usersettings.getCategory();
+      this.limit = this.usersettings.getLimit();
+      this.getPosts(this.category, this.limit);
+      this.usersettings.resetHasChanged();
     }
   }
 
-  // ionViewDidLoad() {
-  //   console.log('ionViewDidLoad RedditsPage');
-  // }
-
-  ngOnInit() {
-    this.getPosts(this.category, this.limit);
-  }
-
-  public getPosts(category, limit) {
-
+  getPosts(category, limit) {
     let loader = this.loadingCtrl.create({
       content: "Loading..."
     });
