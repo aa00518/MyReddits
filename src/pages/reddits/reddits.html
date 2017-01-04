@@ -2,13 +2,10 @@
   <ion-navbar color="primary">
     <ion-title>My Reddits</ion-title>
   </ion-navbar>
-</ion-header>
-
-<ion-content padding class="tabSwitch">
-  <ion-list>
-    <ion-item>
-      <ion-label fixed>Category</ion-label>
-      <ion-select (ionChange)="changeCategory()" [(ngModel)]="category" name="category">
+  <ion-toolbar class="tabSwitch">
+    <ion-item no-lines>
+      <ion-label>Category</ion-label>
+      <ion-select (ionChange)="changeCategory()" [(ngModel)]="category">
         <ion-option value="sports">Sports</ion-option>
         <ion-option value="food">Food</ion-option>
         <ion-option value="news">News</ion-option>
@@ -18,18 +15,23 @@
         <ion-option value="art">Art</ion-option>
       </ion-select>
     </ion-item>
-  </ion-list>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding class="tabSwitch">
   <ion-list>
     <ion-item *ngFor="let item of items">
+      <span style="font-size:small;">{{ item.data.title }}</span>
+      <ion-item no-lines>
       <ion-thumbnail *ngIf="item.data.thumbnail" item-left>
         <img src="{{item.data.thumbnail}}">
       </ion-thumbnail>
-      <h2>{{ item.data.title }}</h2>
-      <p>
+      <p style="font-size:small;">
         <ion-icon name="thumbs-up">{{item.data.score}}</ion-icon>&nbsp;&nbsp;
         <ion-icon name="chatboxes">{{item.data.num_comments}}</ion-icon>
       </p>
       <button ion-button clear item-right (click)="viewItem(item.data)">View</button>
+      </ion-item>
     </ion-item>
   </ion-list>
 </ion-content>
