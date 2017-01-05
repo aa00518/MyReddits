@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { Component, ViewChild } from '@angular/core';
+import { NavController, NavParams, Content } from 'ionic-angular';
 import { Redditsprovider } from '../../providers/redditsprovider';
 import { Usersettings } from '../../providers/usersettings';
 import { DetailsPage } from '../details/details'
@@ -11,11 +11,13 @@ import { LoadingController } from 'ionic-angular';
 })
 export class RedditsPage {
   
+  @ViewChild(Content) content: Content;
   items: any;
   category: any;
   limit: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private redditsprovider: Redditsprovider, private loadingCtrl: LoadingController, private usersettings: Usersettings) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private redditsprovider: Redditsprovider,
+              private loadingCtrl: LoadingController, private usersettings: Usersettings) {
   }
 
   ionViewWillEnter() {
@@ -36,9 +38,22 @@ export class RedditsPage {
 
     this.redditsprovider.getPosts(category, limit).subscribe(response => {
       this.items = response.data.children;
+      this.content.scrollToTop();
+      loader.dismiss();
     });
+  }
 
-    loader.dismiss();
+  doRefresh(refresher) {
+    // let loader = this.loadingCtrl.create({
+    //   content: "Loading..."
+    // });
+    // loader.present();
+
+    this.redditsprovider.getPosts(this.category, this.limit).subscribe(response => {
+      this.items = response.data.children;
+      refresher.complete();
+      //loader.dismiss();
+    });
   }
 
   viewItem(item) {
