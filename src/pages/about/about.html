@@ -12,4 +12,9 @@
   <ion-item>
     Version: 1.0.0
   </ion-item>
+  <ion-list>
+    <ion-item *ngFor="let item of items">
+      <span style="font-size:small;">{{ item.text }}</span>
+    </ion-item>
+  </ion-list>
 </ion-content>
