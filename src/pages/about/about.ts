@@ -22,30 +22,47 @@ export class AboutPage {
 // https://docs.microsoft.com/en-us/azure/app-service-mobile/app-service-mobile-cordova-get-started-offline-data
 // https://github.com/azure/azure-mobile-apps-js-client/blob/master/offline-sync.md
 // https://docs.microsoft.com/en-us/azure/app-service-mobile/app-service-mobile-cordova-get-started-users
+// https://github.com/Azure/azure-mobile-apps-js-client - 25 days ago as of 1/6/2017
 
   fetchToDos() {
-    var client = new azureMobileClient.MobileServiceClient('https://cloudclient.azurewebsites.net');
-    var todoTable = client.getTable('todoitem');
+    //console.log("Inside fetchToDos.");
+
+    var client = new azureMobileClient.MobileServiceClient("https://cloudclient.azurewebsites.net");
+    //console.log("step 1");
+    var todoTable = client.getTable("todoitem");
+    //console.log("step 2");
 
     todoTable
-      .where({ deleted: false, complete: false })
-      .orderBy('text')
-      .read().then(results => {
+    //.where({ deleted: false, complete: false })  // BUG on android!!
+    //.orderBy("text")                             // BUG on android!!
+    .read().then(results => {
+      //console.log("step 3");
       this.items = results;
     }, error => {
+      //console.log("step 4");
       this.items = null;
+      //console.log(error);
     });
 
+    // var returnvalue = [];
+
     // function success(results) {
-    //   this.items =  results;
-    //   // var numItemsRead = results.length;
-    //   // for (var i = 0; i < results.length; i++) {
-    //   //   var row = results[i];
-    //   // }
+    //   console.log("step 3");
+    //    for (var i = 0; i < results.length; i++) {
+    //      returnvalue.push(results[i]);
+    //    }
+    // }
+    
+    // function failure(error) {
+    //   console.log("step 4");
+    //   console.log(error);
     // }
 
-    // function failure(error) {
-    //   this.items = null;
-    // }
+    // this.items = returnvalue;
+
+    // todoTable
+    //   //.where({ deleted: false, complete: false })  // BUG!!
+    //   //.orderBy("text")                             // BUG!!
+    //   .read().then(success, failure);
   }
 }
