@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
-declare var WindowsAzure: any;
-import '../../../plugins/cordova-plugin-ms-azure-mobile-apps/www/MobileServices.Cordova.js'
+//declare var WindowsAzure: any;
+//import '../../../plugins/cordova-plugin-ms-azure-mobile-apps/www/MobileServices.Cordova.js'
+import WindowsAzure from 'azure-mobile-apps-client';
 
 @Component({
   selector: 'page-about',
@@ -30,7 +31,7 @@ export class AboutPage {
     var todoTable = client.getTable("todoitem");
 
     todoTable
-    //.where({ deleted: false, complete: false })  // BUG on android!!
+    .where({ deleted: false, complete: false })  // BUG on android!!
     .orderBy("text")
     .read().then(results => {
       this.items = results;
