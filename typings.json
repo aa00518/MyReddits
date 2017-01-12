@@ -1,5 +1,0 @@
-{
-  "globalDependencies": {
-    "azuremobileservicesclient": "registry:dt/azuremobileservicesclient#1.0.0+20160906134542"
-  }
-}

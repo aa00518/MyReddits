@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 //declare var WindowsAzure: any;
 //import '../../../plugins/cordova-plugin-ms-azure-mobile-apps/www/MobileServices.Cordova.js'
-import WindowsAzure from 'azure-mobile-apps-client';
+import azureMobileClient from 'azure-mobile-apps-client';
 
 @Component({
   selector: 'page-about',
@@ -27,7 +27,7 @@ export class AboutPage {
 // https://github.com/Azure/azure-mobile-apps-js-client - 25 days ago as of 1/6/2017
 
   fetchToDos() {
-    var client = WindowsAzure.MobileServiceClient("https://cloudclient.azurewebsites.net");
+    var client = new azureMobileClient.MobileServiceClient("https://cloudclient.azurewebsites.net");
     var todoTable = client.getTable("todoitem");
 
     todoTable

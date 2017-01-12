@@ -1,8 +1,0 @@
-{
-  "resolution": "main",
-  "tree": {
-    "src": "https://raw.githubusercontent.com/DefinitelyTyped/DefinitelyTyped/545269415d970474d71faba3e1032c5f76b82588/azure-mobile-services-client/AzureMobileServicesClient.d.ts",
-    "raw": "registry:dt/azuremobileservicesclient#1.0.0+20160906134542",
-    "typings": "https://raw.githubusercontent.com/DefinitelyTyped/DefinitelyTyped/545269415d970474d71faba3e1032c5f76b82588/azure-mobile-services-client/AzureMobileServicesClient.d.ts"
-  }
-}
