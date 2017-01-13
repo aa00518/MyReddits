@@ -1,7 +1,5 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
-//declare var WindowsAzure: any;
-//import '../../../plugins/cordova-plugin-ms-azure-mobile-apps/www/MobileServices.Cordova.js'
 import azureMobileClient from 'azure-mobile-apps-client';
 
 @Component({
@@ -31,14 +29,13 @@ export class AboutPage {
     var todoTable = client.getTable("todoitem");
 
     todoTable
-    //.where({ deleted: false, complete: false })  // BUG on android!!
-    .where("(deleted eq false) and (complete eq false)")
+    .where({ deleted: false, complete: false })  // BUG on android -- only in prod???
+    //.where("(deleted eq false) and (complete eq false)")
     .orderBy("text")
     .read().then(results => {
       this.items = results;
     }, error => {
       this.items = null;
-      console.log(error);
     });
   }
 }
