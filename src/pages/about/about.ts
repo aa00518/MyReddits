@@ -31,12 +31,14 @@ export class AboutPage {
     var todoTable = client.getTable("todoitem");
 
     todoTable
-    .where({ deleted: false, complete: false })  // BUG on android!!
+    //.where({ deleted: false, complete: false })  // BUG on android!!
+    .where("(deleted eq false) and (complete eq false)")
     .orderBy("text")
     .read().then(results => {
       this.items = results;
     }, error => {
       this.items = null;
+      console.log(error);
     });
   }
 }
