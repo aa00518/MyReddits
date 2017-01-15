@@ -1,5 +1,6 @@
 ionic serve -w chrome --lab
 
+ionic build android
 ionic run android --prod
 
 ionic g page pageName
