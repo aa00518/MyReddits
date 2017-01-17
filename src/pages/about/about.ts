@@ -1,20 +1,74 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import azureMobileClient from 'azure-mobile-apps-client';
+import {AngularFire, FirebaseListObservable, AuthProviders, FirebaseAuthState } from 'angularfire2';
 
 @Component({
   selector: 'page-about',
   templateUrl: 'about.html'
 })
 export class AboutPage {
-  
+  angFire: AngularFire;
+  user: FirebaseAuthState;
+  accounts: FirebaseListObservable<any>;
   items: any;
 
-  constructor(public navCtrl: NavController) {
+  constructor(public navCtrl: NavController, af: AngularFire) {
+    this.angFire = af;
+    af.auth.subscribe(user => {
+      if(user) {
+        this.user = user;
+        this.accounts = af.database.list('/Accounts', {
+          query: {
+            orderByChild: 'userID',
+            equalTo: this.user.auth.uid
+          }
+      });
+      }
+      else {
+        this.user = null;
+        this.accounts = null;
+//         af.auth.login({ provider: AuthProviders.Google }).then(a => {
+//           this.user = a;
+//           this.accounts = af.database.list('/Accounts');
+//         }).catch(a => {
+//           this.user = {};
+//         });
+      }
+    });
+  }
+
+  doLogin() {
+    this.angFire.auth.login({ provider: AuthProviders.Google }).then(a => {
+      this.user = a;
+      this.accounts = this.angFire.database.list('/Accounts', {
+        query: {
+          orderByChild: 'userID',
+          equalTo: this.user.auth.uid
+        }
+      });
+    }).catch(a => {
+      this.user = null;
+      this.accounts = null;
+    });
+  }
+
+  doLogout() {
+    this.angFire.auth.logout().then(reason => {
+      this.user = null;
+      this.accounts = null;
+    }).catch(reason => {
+      this.user = null;
+      this.accounts = null;
+    });
   }
 
   ionViewWillEnter() {
     this.fetchToDos();
+  }
+
+  saveAccount() {
+    this.accounts.push({ accountName: 'Big Farter', userID: this.user.auth.uid });
   }
 
 // https://docs.microsoft.com/en-us/azure/app-service-mobile/app-service-mobile-html-how-to-use-client-library
