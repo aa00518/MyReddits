@@ -38,8 +38,13 @@ export class AboutPage {
     });
   }
 
+  // http://ionicframework.com/docs/v2/native/google-plus/
+  // http://blog.ionic.io/google-oauth-changes/
+  // http://vpt-deeplearner.tech/2016/10/17/ionic-2-googleplus-authentication-using-firebase-and-angularfire-on-android-device/
+
   doLogin() {
     this.angFire.auth.login({ provider: AuthProviders.Google }).then(a => {
+      console.log("Starting auth... " + JSON.stringify(a));
       this.user = a;
       this.accounts = this.angFire.database.list('/Accounts', {
         query: {
@@ -48,6 +53,7 @@ export class AboutPage {
         }
       });
     }).catch(a => {
+      console.log("Auth error... " + JSON.stringify(a));
       this.user = null;
       this.accounts = null;
     });
