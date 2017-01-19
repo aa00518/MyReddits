@@ -12,13 +12,13 @@
   <ion-item>
     Version: 1.0.0
   </ion-item>
-  <button *ngIf="angFire.auth | async" ion-button block (click)="saveAccount()">Save Account</button>
-  <button *ngIf="!(angFire.auth | async)" ion-button block (click)="doLogin()">Login</button>
-  <button *ngIf="angFire.auth | async" ion-button block (click)="doLogout()">Logout</button>
-  <ion-item *ngIf="angFire.auth | async">
-    Logged In as {{ user.auth.displayName }}
+  <button *ngIf="user" ion-button block (click)="saveAccount()">Save Account</button>
+  <button *ngIf="!user" ion-button block (click)="doLogin()">Login</button>
+  <button *ngIf="user" ion-button block (click)="doLogout()">Logout</button>
+  <ion-item *ngIf="user">
+    Logged In as {{ userID }}
   </ion-item>
-  <ion-item *ngIf="!(angFire.auth | async)">
+  <ion-item *ngIf="!user">
     Logged Out
   </ion-item>
   <ion-list>
