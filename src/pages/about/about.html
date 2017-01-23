@@ -12,15 +12,27 @@
   <ion-item>
     Version: 1.0.0
   </ion-item>
-  <button *ngIf="user" ion-button block (click)="saveAccount()">Save Account</button>
-  <button *ngIf="!user" ion-button block (click)="doLogin()">Login</button>
-  <button *ngIf="user" ion-button block (click)="doLogout()">Logout</button>
-  <ion-item *ngIf="user">
-    Logged In as {{ userID }}
+  <button *ngIf="userProfile" ion-button block (click)="saveAccount()">Save Account</button>
+  <button *ngIf="!userProfile" ion-button block (click)="googlePlusLogin()">Login</button>
+  <button *ngIf="userProfile" ion-button block (click)="doLogout()">Logout</button>
+  <ion-item *ngIf="userProfile">
+    Logged In as {{ userProfile.displayName }}
   </ion-item>
-  <ion-item *ngIf="!user">
+  <ion-item *ngIf="!userProfile">
     Logged Out
   </ion-item>
+  <ion-card *ngIf="userProfile">
+    <img [src]="userProfile.photoURL" />
+    <ion-card-content>
+      <ion-card-title>
+        {{ userProfile.displayName }}
+      </ion-card-title>
+        uid: {{ userProfile.uid }}<br />
+        displayName: {{ userProfile.displayName }}<br />
+        email: {{ userProfile.email }}<br />
+        photoURL: {{ userProfile.photoURL }}
+    </ion-card-content>
+  </ion-card>
   <ion-list>
     <ion-item *ngFor="let account of accounts | async">
       <span style="font-size:small;">{{ account.accountName }}</span>
