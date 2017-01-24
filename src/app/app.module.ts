@@ -7,8 +7,7 @@ import { RedditsPage } from '../pages/reddits/reddits';
 import { TabsPage } from '../pages/tabs/tabs';
 import { DetailsPage } from '../pages/details/details';
 import { AngularFireModule } from 'angularfire2';
-//import { AuthProviders, AuthMethods } from 'angularfire2';
-//import firebase from 'firebase';
+import { AuthProviders, AuthMethods } from 'angularfire2';
 
 export const firebaseConfig = {
   apiKey: "AIzaSyC18FXK353nkslSfU2fkMp2_XKIGQ1APsQ",
@@ -18,12 +17,12 @@ export const firebaseConfig = {
   messagingSenderId: "658095225206"
 };
 
-// export const firebaseAuthConfig = {
-//   provider: AuthProviders.Google,
-//   method: AuthMethods.Popup,
-//   remember: 'default',
-//   scope: ['email']
-// }
+export const firebaseAuthConfig = {
+  provider: AuthProviders.Google,
+  method: AuthMethods.Popup,
+  remember: 'default',
+  scope: ['email']
+}
 
 @NgModule({
   declarations: [
@@ -36,7 +35,7 @@ export const firebaseConfig = {
   ],
   imports: [
     IonicModule.forRoot(MyApp),
-    AngularFireModule.initializeApp(firebaseConfig) // , firebaseAuthConfig
+    AngularFireModule.initializeApp(firebaseConfig , firebaseAuthConfig)
   ],
   bootstrap: [IonicApp],
   entryComponents: [

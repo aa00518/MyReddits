@@ -13,7 +13,7 @@
     Version: 1.0.0
   </ion-item>
   <button *ngIf="userProfile" ion-button block (click)="saveAccount()">Save Account</button>
-  <button *ngIf="!userProfile" ion-button block (click)="googlePlusLogin()">Login</button>
+  <button *ngIf="!userProfile" ion-button block (click)="doLogin()">Login</button>
   <button *ngIf="userProfile" ion-button block (click)="doLogout()">Logout</button>
   <ion-item *ngIf="userProfile">
     Logged In as {{ userProfile.displayName }}
