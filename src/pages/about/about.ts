@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { NavController, AlertController, Platform } from 'ionic-angular';
+import { Component, ViewChild } from '@angular/core';
+import { NavController, AlertController, Platform, ToastController } from 'ionic-angular';
 import azureMobileClient from 'azure-mobile-apps-client';
 import { AngularFire, FirebaseListObservable, FirebaseAuthState, AuthProviders } from 'angularfire2';
 import { GooglePlus } from 'ionic-native';
@@ -10,11 +10,24 @@ import firebase from 'firebase';
   templateUrl: 'about.html'
 })
 export class AboutPage {
+  @ViewChild('txtActivity') txtActivity;
+  @ViewChild('txtAmount') txtAmount;
   userProfile: FirebaseAuthState = null;
   accounts: FirebaseListObservable<any>;
   items: any;
+  activity: string;
+  amount: number;
 
-  constructor(public navCtrl: NavController, public af: AngularFire, public alertController: AlertController, public platform: Platform) {
+  constructor(public navCtrl: NavController, public af: AngularFire, public alertController: AlertController, public platform: Platform, public toastCtrl: ToastController) {
+  }
+
+  presentToast(message: string) {
+    let toast = this.toastCtrl.create({
+      message: message,
+      duration: 3000,
+      position: "top"
+    });
+    toast.present();
   }
 
   googlePlusLogin() {
@@ -124,7 +137,48 @@ export class AboutPage {
   }
 
   saveAccount() {
-    this.accounts.push({ accountName: 'Ronnie', userID: this.userProfile.uid });
+    if (this.activity != null) {
+      if (this.activity.trim() == "") {
+        this.presentToast("Please enter an Activity.");
+        this.activity = null;
+        setTimeout(() => {
+          this.txtActivity.setFocus();
+        }, 500);
+        return;
+      }
+    } else {
+      this.presentToast("Please enter an Activity.");
+      this.activity = null;
+        setTimeout(() => {
+          this.txtActivity.setFocus();
+        }, 500);
+      return;
+    }
+
+    if (this.amount != null) {
+      if (this.amount <= 0) {
+        this.presentToast("Please enter an Amount.");
+        this.amount = null;
+        setTimeout(() => {
+          this.txtAmount.setFocus();
+        }, 500);
+        return;
+      }
+    } else {
+      this.presentToast("Please enter an Amount.");
+      this.amount = null;
+        setTimeout(() => {
+          this.txtAmount.setFocus();
+        }, 500);
+      return;
+    }
+
+    this.accounts.push({ userID: this.userProfile.uid,
+                         accountName: 'Savings',
+                         activity: this.activity.trim(),
+                         amount: this.amount });
+    this.activity = null;
+    this.amount = null;
   }
 
   ionViewWillEnter() {

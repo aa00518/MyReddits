@@ -7,12 +7,29 @@
 </ion-header>
 
 <ion-content padding class="tabSwitch">
+  <ion-list *ngIf="userProfile">
+    <ion-item>
+      <ion-label floating>Activity</ion-label>
+      <ion-input #txtActivity [(ngModel)]="activity" type="text"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label floating>Amount</ion-label>
+      <ion-input #txtAmount [(ngModel)]="amount" type="number"></ion-input>
+    </ion-item>
+  </ion-list>
+  <button *ngIf="userProfile" ion-button block (click)="saveAccount()">Save Account</button>
+  <ion-list>
+    <ion-item *ngFor="let account of accounts | async">
+      <span style="font-size:small;">{{ account.accountName }}</span>
+      <span style="font-size:small;">{{ account.activity }}</span>
+      <span style="font-size:small;">{{ account.amount }}</span>
+    </ion-item>
+  </ion-list>
   <h2>My Reddits App</h2>
   <p>A simple Ionic 2 app for fetching and displaying subreddits.</p>
   <ion-item>
     Version: 1.0.0
   </ion-item>
-  <button *ngIf="userProfile" ion-button block (click)="saveAccount()">Save Account</button>
   <button *ngIf="!userProfile" ion-button block (click)="doLogin()">Login</button>
   <button *ngIf="userProfile" ion-button block (click)="doLogout()">Logout</button>
   <ion-item *ngIf="userProfile">
@@ -33,11 +50,6 @@
         photoURL: {{ userProfile.photoURL }}
     </ion-card-content>
   </ion-card>
-  <ion-list>
-    <ion-item *ngFor="let account of accounts | async">
-      <span style="font-size:small;">{{ account.accountName }}</span>
-    </ion-item>
-  </ion-list>
   <ion-list>
     <ion-item *ngFor="let item of items">
       <span style="font-size:small;">{{ item.text }}</span>
