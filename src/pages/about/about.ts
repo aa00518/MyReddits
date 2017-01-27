@@ -1,6 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
 import { NavController, AlertController, Platform, ToastController, LoadingController } from 'ionic-angular';
-import azureMobileClient from 'azure-mobile-apps-client';
 import { AngularFire, FirebaseListObservable, FirebaseAuthState, AuthProviders } from 'angularfire2';
 import { GooglePlus } from 'ionic-native';
 import firebase from 'firebase';
@@ -14,7 +13,6 @@ export class AboutPage {
   @ViewChild('txtAmount') txtAmount;
   userProfile: FirebaseAuthState = null;
   accounts: FirebaseListObservable<any>;
-  items: any;
   activity: string;
   amount: number;
 
@@ -198,22 +196,7 @@ export class AboutPage {
     {
       this.fetchMyAccounts();
     }
-    this.fetchToDos();
 
     loader.dismiss();
-  }
-
-  fetchToDos() {
-    var client = new azureMobileClient.MobileServiceClient("https://cloudclient.azurewebsites.net");
-    var todoTable = client.getTable("todoitem");
-
-    todoTable
-    .where({ deleted: false, complete: false })  // BUG on android -- only in prod???
-    .orderBy("text")
-    .read().then(results => {
-      this.items = results;
-    }, error => {
-      this.items = null;
-    });
   }
 }
