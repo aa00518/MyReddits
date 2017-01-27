@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { NavController, AlertController, Platform, ToastController } from 'ionic-angular';
+import { NavController, AlertController, Platform, ToastController, LoadingController } from 'ionic-angular';
 import azureMobileClient from 'azure-mobile-apps-client';
 import { AngularFire, FirebaseListObservable, FirebaseAuthState, AuthProviders } from 'angularfire2';
 import { GooglePlus } from 'ionic-native';
@@ -18,7 +18,8 @@ export class AboutPage {
   activity: string;
   amount: number;
 
-  constructor(public navCtrl: NavController, public af: AngularFire, public alertController: AlertController, public platform: Platform, public toastCtrl: ToastController) {
+  constructor(public navCtrl: NavController, public af: AngularFire, public alertController: AlertController, public platform: Platform,
+              public toastCtrl: ToastController, public loadingCtrl: LoadingController) {
   }
 
   presentToast(message: string) {
@@ -69,6 +70,8 @@ export class AboutPage {
     coolAlert.present();
   }
 
+  // http://stackoverflow.com/questions/34374816/firebase-how-do-i-write-multiple-orderbychild-for-extracting-data/34375925#34375925
+  // https://github.com/angular/angularfire2/issues/283
   fetchMyAccounts() {
     this.accounts = this.af.database.list('/Accounts', {
       query: {
@@ -176,12 +179,18 @@ export class AboutPage {
     this.accounts.push({ userID: this.userProfile.uid,
                          accountName: 'Savings',
                          activity: this.activity.trim(),
-                         amount: this.amount });
+                         amount: this.amount,
+                         transactionDate: Date.now() });
     this.activity = null;
     this.amount = null;
   }
 
   ionViewWillEnter() {
+    let loader = this.loadingCtrl.create({
+      content: "Loading..."
+    });
+    loader.present();
+
     if (this.userProfile == null) {
       this.doSilentLogin();
     }
@@ -190,6 +199,8 @@ export class AboutPage {
       this.fetchMyAccounts();
     }
     this.fetchToDos();
+
+    loader.dismiss();
   }
 
   fetchToDos() {
