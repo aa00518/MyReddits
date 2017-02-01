@@ -18,7 +18,7 @@
     </ion-item>
   </ion-list>
   <button *ngIf="userProfile" ion-button block (click)="saveAccount()">Save Account</button>
-  <ion-list>
+  <ion-list *ngIf="accounts">
     <ion-item *ngFor="let account of accounts | async">
       <span style="font-size:small;">{{ account.accountName }}</span>
       <span style="font-size:small;">{{ account.activity }}</span>

@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { NavController, AlertController, Platform, ToastController, LoadingController } from 'ionic-angular';
+import { NavController, AlertController, Platform, ToastController, LoadingController, Content } from 'ionic-angular';
 import { AngularFire, FirebaseListObservable, FirebaseAuthState, AuthProviders } from 'angularfire2';
 import { GooglePlus } from 'ionic-native';
 import firebase from 'firebase';
@@ -11,10 +11,12 @@ import firebase from 'firebase';
 export class AboutPage {
   @ViewChild('txtActivity') txtActivity;
   @ViewChild('txtAmount') txtAmount;
+  @ViewChild(Content) content: Content;
   userProfile: FirebaseAuthState = null;
   accounts: FirebaseListObservable<any>;
   activity: string;
   amount: number;
+  loader: any;
 
   constructor(public navCtrl: NavController, public af: AngularFire, public alertController: AlertController, public platform: Platform,
               public toastCtrl: ToastController, public loadingCtrl: LoadingController) {
@@ -35,10 +37,19 @@ export class AboutPage {
       firebase.auth().signInWithCredential(provider).then((success) => {
         this.userProfile = success;
         this.fetchMyAccounts();
+        this.content.scrollToTop();
       }).catch((error) => {
+        // if (this.loader != null)
+        // {
+        //   this.loader.dismiss();
+        // }
         //this.displayAlert(JSON.stringify(error), "Firebase login failed.");
       });
     }).catch((error) => {
+      // if (this.loader != null)
+      // {
+      //   this.loader.dismiss();
+      // }
       //this.displayAlert(JSON.stringify(error), "Google Plus login failed.");
     });
   }
@@ -47,7 +58,12 @@ export class AboutPage {
     this.af.auth.login({ provider: AuthProviders.Google }).then(a => {
       this.userProfile = a.auth as any;
       this.fetchMyAccounts();
+      this.content.scrollToTop();
     }).catch(error => {
+      // if (this.loader != null)
+      // {
+      //   this.loader.dismiss();
+      // }
       //this.displayAlert(JSON.stringify(error), "Firebase login failed.");
     });
   }
@@ -76,7 +92,11 @@ export class AboutPage {
         orderByChild: 'userID',
         equalTo: this.userProfile.uid
       }
-    });
+    }).take(5);
+    // if (this.loader != null)
+    // {
+    //   this.loader.dismiss();
+    // }
   }
 
   // uid
@@ -105,6 +125,10 @@ export class AboutPage {
           this.fetchMyAccounts();
         }
         else {
+          // if (this.loader != null)
+          // {
+          //   this.loader.dismiss();
+          // }
           //this.displayAlert(JSON.stringify(res), "Firebase silent login failed.");
         }
       });
@@ -112,6 +136,14 @@ export class AboutPage {
   }
 
   doLogin() {
+    if (this.loader == null)
+    {
+      this.loader = this.loadingCtrl.create({
+        content: "Loading..."
+      });
+      this.loader.present();
+    }
+
     if (this.platform.is('android')) {
       this.googlePlusLogin();
     }
@@ -128,13 +160,13 @@ export class AboutPage {
     //   });
     // }
     // else {
-      this.af.auth.logout().then(reason => {
-      }).catch(error => {
-        //this.displayAlert(JSON.stringify(error), "Firebase logout failed.");
-      });
+    this.af.auth.logout().then(reason => {
+    }).catch(error => {
+    //this.displayAlert(JSON.stringify(error), "Firebase logout failed.");
+    });
     // }
-    this.userProfile = null;
     this.accounts = null;
+    this.userProfile = null;
   }
 
   saveAccount() {
@@ -184,10 +216,13 @@ export class AboutPage {
   }
 
   ionViewWillEnter() {
-    let loader = this.loadingCtrl.create({
-      content: "Loading..."
-    });
-    loader.present();
+    if (this.loader == null)
+    {
+      this.loader = this.loadingCtrl.create({
+        content: "Loading..."
+      });
+      this.loader.present();
+    }
 
     if (this.userProfile == null) {
       this.doSilentLogin();
@@ -196,7 +231,16 @@ export class AboutPage {
     {
       this.fetchMyAccounts();
     }
+  }
 
-    loader.dismiss();
+  ionViewDidEnter() {
+    if (this.loader != null)
+    {
+      this.loader.dismiss();
+    }
+  }
+
+  ionViewDidLoad() {
+    // Called once per page creation - may want to put login stuff in here
   }
 }
