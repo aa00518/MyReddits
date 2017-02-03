@@ -13,7 +13,8 @@ export class AboutPage {
   @ViewChild('txtAmount') txtAmount;
   @ViewChild(Content) content: Content;
   userProfile: FirebaseAuthState = null;
-  accounts: FirebaseListObservable<any>;
+  //accounts: FirebaseListObservable<any>;
+  accounts: any;
   activity: string;
   amount: number;
   loader: any;
@@ -87,16 +88,20 @@ export class AboutPage {
   // http://stackoverflow.com/questions/34374816/firebase-how-do-i-write-multiple-orderbychild-for-extracting-data/34375925#34375925
   // https://github.com/angular/angularfire2/issues/283
   fetchMyAccounts() {
-    this.accounts = this.af.database.list('/Accounts', {
+    //this.accounts = this.af.database.list('/Accounts', {
+    this.af.database.list('/Accounts', {
       query: {
         orderByChild: 'userID',
         equalTo: this.userProfile.uid
       }
-    }).take(5);
-    // if (this.loader != null)
-    // {
-    //   this.loader.dismiss();
-    // }
+    }).take(5).subscribe((value) => {
+      this.accounts = value;
+      if (this.loader != null) {
+        this.loader.dismiss();
+      }
+    }, (error) => {
+    }, () => {
+    });
   }
 
   // uid
@@ -125,10 +130,10 @@ export class AboutPage {
           this.fetchMyAccounts();
         }
         else {
-          // if (this.loader != null)
-          // {
-          //   this.loader.dismiss();
-          // }
+          if (this.loader != null)
+          {
+            this.loader.dismiss();
+          }
           //this.displayAlert(JSON.stringify(res), "Firebase silent login failed.");
         }
       });
@@ -234,10 +239,9 @@ export class AboutPage {
   }
 
   ionViewDidEnter() {
-    if (this.loader != null)
-    {
-      this.loader.dismiss();
-    }
+    // if (this.loader != null) {
+    //   this.loader.dismiss();
+    // }
   }
 
   ionViewDidLoad() {
