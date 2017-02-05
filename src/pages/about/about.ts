@@ -211,7 +211,8 @@ export class AboutPage {
       return;
     }
 
-    this.accounts.push({ userID: this.userProfile.uid,
+    //this.accounts.push({ userID: this.userProfile.uid,
+    this.af.database.list('/Accounts').push({ userID: this.userProfile.uid,
                          accountName: 'Savings',
                          activity: this.activity.trim(),
                          amount: this.amount,
