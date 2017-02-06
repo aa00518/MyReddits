@@ -18,6 +18,7 @@ export class AboutPage {
   activity: string;
   amount: number;
   loader: any;
+  account: string = "Savings";
 
   constructor(public navCtrl: NavController, public af: AngularFire, public alertController: AlertController, public platform: Platform,
               public toastCtrl: ToastController, public loadingCtrl: LoadingController) {
@@ -89,13 +90,14 @@ export class AboutPage {
   // https://github.com/angular/angularfire2/issues/283
   fetchMyAccounts() {
     //this.accounts = this.af.database.list('/Accounts', {
-    this.af.database.list('/Accounts', {
+    this.af.database.list('/Transactions/' + this.userProfile.uid + '/' + this.account, {
       query: {
-        orderByChild: 'userID',
-        equalTo: this.userProfile.uid
+        orderByChild: 'transactionDate',
+        //equalTo: this.userProfile.uid,
+        limitToFirst: 10
       }
-    }).take(5).subscribe((value) => {
-      this.accounts = value;
+    }).subscribe(value => {
+      this.accounts = value.reverse();
       if (this.loader != null) {
         this.loader.dismiss();
       }
@@ -212,11 +214,18 @@ export class AboutPage {
     }
 
     //this.accounts.push({ userID: this.userProfile.uid,
-    this.af.database.list('/Accounts').push({ userID: this.userProfile.uid,
-                         accountName: 'Savings',
-                         activity: this.activity.trim(),
-                         amount: this.amount,
-                         transactionDate: Date.now() });
+    // this.af.database.list('/Accounts').push({ userID: this.userProfile.uid,
+    //                       accountName: 'Savings',
+    //                       activity: this.activity.trim(),
+    //                       amount: this.amount,
+    //                       transactionDate: Date.now() });
+
+    this.af.database.list('/Transactions/' + this.userProfile.uid + '/' + this.account).push({ userID: this.userProfile.uid,
+                          accountName: this.account,
+                          activity: this.activity.trim(),
+                          amount: this.amount,
+                          transactionDate: Date.now() });
+
     this.activity = null;
     this.amount = null;
   }
